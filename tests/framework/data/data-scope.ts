@@ -23,6 +23,12 @@ export class DataScope {
     return resource;
   }
 
+  /** 资源已由被测流程主动删除时，移除对应的兜底清理器。 */
+  release(label: string): void {
+    const index = this.entries.findIndex((entry) => entry.label === label);
+    if (index >= 0) this.entries.splice(index, 1);
+  }
+
   async dispose(): Promise<void> {
     if (this.disposed) return;
     this.disposed = true;

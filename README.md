@@ -11,7 +11,7 @@ cd /Users/fish/project/Auto-Test/ui-automation
 npm install
 npx playwright install chromium
 npm run typecheck
-npm run test:p0
+npm test
 ```
 
 测试环境地址和账号仅保存在忽略的 `.env` 中，CI 使用密钥注入。`.auth/` 保存浏览器认证态，也不得提交。
@@ -30,10 +30,12 @@ tests/platforms/resource-management/ # locators、pages、specs
 
 ## 夹具与数据隔离
 
-SSO 登录 P0 和门户登录链路直接使用 Playwright `page`，验证真实登录行为。二级平台业务 P0 使用 `tests/shared/sso/fixtures/authenticated.fixture.ts` 的 `authenticatedPage`：每条用例有独立 BrowserContext，优先复用经过访问验证的 `.auth/default.json`，过期时才重走 SSO。
+SSO 登录和门户登录链路直接使用 Playwright `page`，验证真实登录行为。二级平台业务用例使用 `tests/shared/sso/fixtures/authenticated.fixture.ts` 的 `authenticatedPage`：每条用例有独立 BrowserContext，优先复用经过访问验证的 `.auth/default.json`，过期时才重走 SSO。
 
-写入型用例还必须注入 `dataScope`。资源创建后立即登记对应清理器，Fixture 在用例结束时按逆序执行清理；当前入口 P0 是只读链路，不创建平台数据。
+写入型用例还必须注入 `dataScope`。资源创建后立即登记对应清理器，Fixture 在用例结束时按逆序执行清理。跨多个前置资源的场景采用“API 造数据 + UI 验行为”：平台数据工厂通过已认证会话调用本平台 API 造数，Page Object 只验证用户经 UI 可见的业务结果。
+
+机器标注等需要 API 前置的平台，在各自平台目录内以 `api/`、`fixtures/`、`data/` 分层：`api/` 管理会话提取、请求和响应解析，`fixtures/` 提供平台 API 客户端，`data/` 管理数据构造和清理；页面对象不处理 API 会话或 HTTP 请求。
 
 ## 当前状态
 
-SSO、门户、机器标注和资源管理入口均已完成真实页面探索。当前 P0 覆盖：SSO 登录、进入门户、从门户进入机器标注项目管理、从门户进入资源管理资源列表。后续业务 P0 用例按平台目录继续扩展。
+SSO、门户、机器标注和资源管理入口均已完成真实页面探索。当前覆盖：SSO 登录、进入门户、机器标注平台项目管理、项目详情、项目关注、API 预置批次后详情列表验证、新增批次表单入口和必填校验、资源管理资源列表入口。机器标注平台用例按 `specs/access`、`specs/project`、`specs/batch` 模块目录维护，后续新增用例继续按业务模块归档。

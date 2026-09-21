@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "test": "playwright test",
+    "test:machine-annotation": "playwright test tests/platforms/machine-annotation/specs",
     "test:headed": "playwright test --headed",
     "test:p0": "playwright test tests/shared tests/platforms --grep P0",
     "test:debug": "PWDEBUG=1 playwright test",
