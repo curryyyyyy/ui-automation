@@ -3,10 +3,13 @@ import { DataScope } from '../../../framework/data/data-scope.js';
 import { environment } from '../../../framework/core/environment.js';
 import { SessionManager } from '../../../framework/services/session-manager.js';
 import { SsoLoginPage } from '../pages/sso-login.page.js';
+import { createMidsceneAgent, type MidsceneAgent } from '../../../framework/midscene/midscene-agent.js';
 
 type AuthenticatedFixtures = {
   authenticatedPage: Page;
   dataScope: DataScope;
+  /** 可选的 AI 页面代理；未配置 Midscene 时为 undefined。 */
+  midscene: MidsceneAgent | undefined;
 };
 
 /**
@@ -39,6 +42,16 @@ export const test = base.extend<AuthenticatedFixtures>({
     } finally {
       await context?.close();
     }
+  },
+  midscene: async ({ authenticatedPage }, use, testInfo) => {
+    const agent = await createMidsceneAgent(authenticatedPage);
+    if (agent) {
+      testInfo.annotations.push({
+        type: 'midscene',
+        description: '本用例启用了 Midscene AI；确定性断言仍由 Playwright 完成。',
+      });
+    }
+    await use(agent);
   },
 });
 

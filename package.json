@@ -5,6 +5,7 @@
   "scripts": {
     "test": "playwright test",
     "test:machine-annotation": "playwright test tests/platforms/machine-annotation/specs",
+    "test:midscene": "MIDSCENE_ENABLED=true playwright test tests/framework/midscene tests/platforms/machine-annotation/specs/smoke/project-ai-observation.spec.ts",
     "test:headed": "playwright test --headed",
     "test:p0": "playwright test tests/shared tests/platforms --grep P0",
     "test:debug": "PWDEBUG=1 playwright test",
@@ -12,6 +13,8 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@midscene/cli": "^1.13.0",
+    "@midscene/web": "^1.13.0",
     "@playwright/test": "^1.57.0",
     "@types/node": "^22.0.0",
     "dotenv": "^16.6.1",
