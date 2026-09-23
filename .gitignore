@@ -2,6 +2,6 @@ node_modules/
 playwright-report/
 test-results/
 blob-report/
+midscene_run/
 .auth/
 .env
-

@@ -12,8 +12,5 @@ export const projectFormLocators = {
   developerRequiredError: target.text('请选择项目研发负责人', true),
   submitButton: target.role('button', '创建项目', true),
   saveButton: target.role('button', '保存项目', true),
-<<<<<<< HEAD
   cancelButton: target.role('button', /取\s*消/),
-=======
->>>>>>> 5e0e3263e6df14975f2961018d45ca06420f0d83
 };

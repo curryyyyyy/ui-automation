@@ -25,8 +25,6 @@ export class ProjectDataFactory {
     );
     return { id: created.id, name: created.name };
   }
-<<<<<<< HEAD
-
   /** Smoke 主链路主动删除项目后释放兜底清理器。 */
   async deleteProject(project: TestProject): Promise<void> {
     await this.hawkApiClient.deleteProject(project.id);
@@ -36,10 +34,4 @@ export class ProjectDataFactory {
 
 function uniqueProjectName(): string {
   return `MA-PROJECT-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-=======
-}
-
-function uniqueProjectName(): string {
-  return `MA-P0-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
->>>>>>> 5e0e3263e6df14975f2961018d45ca06420f0d83
 }

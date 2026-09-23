@@ -7,7 +7,7 @@ test.describe('机器标注平台 Midscene 语义观察', () => {
     test.skip(!midscene, '请设置 MIDSCENE_ENABLED=true 和 MIDSCENE_MODEL_API_KEY 后运行 AI 观察用例。');
 
     const projects = new ProjectManagementPage(authenticatedPage);
-    await projects.open(environment.platform('machine-annotation').url);
+    await authenticatedPage.goto(environment.platform('machine-annotation').url, { waitUntil: 'domcontentloaded' });
     await projects.assertReady();
 
     // AI 只负责语义观察；最终的可执行结果仍由 Playwright 的确定性断言确认。

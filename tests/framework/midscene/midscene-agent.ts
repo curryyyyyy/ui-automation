@@ -16,8 +16,16 @@ export function isMidsceneConfigured(): boolean {
 export async function createMidsceneAgent(page: Page): Promise<MidsceneAgent | undefined> {
   if (!isMidsceneConfigured()) return undefined;
 
-  const { PlaywrightAgent } = await import('@midscene/web');
-  return new PlaywrightAgent(page) as MidsceneAgent;
+  try {
+    const { PlaywrightAgent } = await import('@midscene/web');
+    return new PlaywrightAgent(page) as MidsceneAgent;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(
+      `Midscene 已启用但依赖不可用，请在 ui-automation 目录执行 npm ci 后重试。原始错误：${message}`,
+      { cause: error },
+    );
+  }
 }
 
 /** 统一封装 AI 操作入口，页面对象和用例不直接依赖第三方实现。 */

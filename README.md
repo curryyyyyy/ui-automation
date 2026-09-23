@@ -36,10 +36,24 @@ SSO 登录和门户登录链路直接使用 Playwright `page`，验证真实登�
 
 机器标注等需要 API 前置的平台，在各自平台目录内以 `api/`、`fixtures/`、`data/` 分层：`api/` 管理会话提取、请求和响应解析，`fixtures/` 提供平台 API 客户端，`data/` 管理数据构造和清理；页面对象不处理 API 会话或 HTTP 请求。
 
+## Playwright 与 Midscene 协作
+
+本工程将 Playwright 作为确定性执行底座，将 Midscene 作为可选的 AI 语义能力层。两者职责固定如下：
+
+- Playwright 负责页面生命周期、稳定 Locator、表单输入、网络等待、数据隔离和最终断言；P0、Smoke 的核心结果不得只由 AI 判断。
+- Midscene 负责页面探索、视觉或语义定位兜底、复杂页面状态的辅助观察，以及尚未沉淀为稳定 Locator 的临时验证。
+- Midscene 只能通过 `tests/framework/midscene/midscene-agent.ts` 和认证 Fixture 使用，业务 Page Object 不得直接导入 `@midscene/web`。
+- AI 能力默认关闭。只有同时设置 `MIDSCENE_ENABLED=true` 和 `MIDSCENE_MODEL_API_KEY` 时，Fixture 才创建 Agent；未配置时普通 Playwright 用例不受影响。
+- AI 操作成功后，必须用 Playwright Locator 或 URL/接口响应补充确定性验证；AI 失败应保留截图、Trace 和 Midscene 运行产物，不得通过调大重试掩盖问题。
+
+运行可选的 Midscene 语义观察用例：
+
+```bash
+MIDSCENE_ENABLED=true MIDSCENE_MODEL_API_KEY=xxx npm run test:midscene
+```
+
+Midscene 的模型地址、模型名和缓存/报告目录按所安装版本的环境变量约定配置，真实 Key 只放在本地 `.env` 或 CI Secret，不提交到仓库。
+
 ## 当前状态
 
-<<<<<<< HEAD
 SSO、门户、机器标注和资源管理入口均已完成真实页面探索。当前覆盖：SSO 登录、进入门户、机器标注平台项目管理、项目详情、项目关注、API 预置批次后详情列表验证、新增批次表单入口和必填校验、资源管理资源列表入口。机器标注平台用例按 `specs/access`、`specs/project`、`specs/batch` 模块目录维护，后续新增用例继续按业务模块归档。
-=======
-SSO、门户、机器标注和资源管理入口均已完成真实页面探索。当前 P0 覆盖：SSO 登录、进入门户、从门户进入机器标注项目管理、创建机器标注项目并刷新验证持久化、按名称检索机器标注项目、关注项目后在我的关注中验证正反向结果、从项目行进入详情、API 预置批次后在详情列表验证、打开新增批次表单、从门户进入资源管理资源列表。后续业务 P0 用例按平台目录继续扩展。
->>>>>>> 5e0e3263e6df14975f2961018d45ca06420f0d83

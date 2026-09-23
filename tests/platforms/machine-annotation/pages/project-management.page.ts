@@ -168,7 +168,6 @@ export class ProjectManagementPage extends BasePage {
     expect(response.ok(), `更新项目接口应成功：${response.status()}`).toBeTruthy();
   }
 
-<<<<<<< HEAD
   /** 保存已回填的编辑表单，验证编辑主链路请求成功。 */
   async saveEditProject(name: string): Promise<void> {
     await this.openEditProject(name);
@@ -187,8 +186,6 @@ export class ProjectManagementPage extends BasePage {
     await expect(this.actions.locator(projectFormLocators.dialog)).toBeHidden();
   }
 
-=======
->>>>>>> 5e0e3263e6df14975f2961018d45ca06420f0d83
   /** 用户从项目行点击“查看”进入详情页，保持与真实操作路径一致。 */
   async openProjectDetail(name: string): Promise<void> {
     await Promise.all([
@@ -197,7 +194,6 @@ export class ProjectManagementPage extends BasePage {
     ]);
   }
 
-<<<<<<< HEAD
   /** 从项目详情返回项目列表，继续沿用真实页面导航状态。 */
   async returnToList(): Promise<void> {
     await Promise.all([
@@ -207,8 +203,6 @@ export class ProjectManagementPage extends BasePage {
     await this.assertReady();
   }
 
-=======
->>>>>>> 5e0e3263e6df14975f2961018d45ca06420f0d83
   async assertProjectVisible(name: string): Promise<void> {
     const row = this.actions.tableRowContaining(projectManagementLocators.projectName(name));
     await expect(row).toBeVisible();
